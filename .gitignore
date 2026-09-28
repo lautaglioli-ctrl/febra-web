@@ -1,4 +1,6 @@
 .vercel
 img_extracted
-
-.vercel
+Public/
+*.mov
+scratch*
+temp_*
