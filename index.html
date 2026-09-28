@@ -299,73 +299,58 @@
       justify-content: center;
     }
 
-    .carousel-arrow {
-      background: none;
-      border: none;
-      color: var(--febra-green);
-      width: 36px;
-      height: 36px;
+    .carousel-wrapper {
+      position: relative;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .carousel-track-container {
+      width: 100%;
+      overflow: hidden;
+      padding: 34px 0 28px 0;
+      position: relative;
+      cursor: grab;
+      user-select: none;
+    }
+    .carousel-track-container:active {
+      cursor: grabbing;
+    }
+
+    .carousel-track {
       display: flex;
       align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      z-index: 10;
-      transition: transform 0.2s ease, opacity 0.2s ease;
-    }
-
-    .carousel-arrow.arrow-prev {
-      left: -40px;
-    }
-
-    .carousel-arrow.arrow-next {
-      right: -40px;
-    }
-
-    .carousel-arrow:hover {
-      transform: translateY(-50%) scale(1.15);
-      opacity: 0.85;
-    }
-
-    .carousel-arrow svg {
-      width: 32px;
-      height: 32px;
-      fill: var(--febra-green);
-    }
-
-    .cards-grid {
-      display: flex;
-      gap: 18px;
-      width: 100%;
-      overflow-x: auto;
-      scroll-behavior: smooth;
-      scrollbar-width: none;
-      -ms-overflow-style: none;
-      scroll-snap-type: x mandatory;
-      padding: 6px 2px 14px 2px;
-      margin: -6px -2px -14px -2px;
-    }
-
-    .cards-grid::-webkit-scrollbar {
-      display: none;
+      width: max-content;
+      transition: transform 0.45s cubic-bezier(0.25, 1, 0.5, 1);
+      will-change: transform;
     }
 
     .product-card {
-      position: relative;
-      flex: 0 0 calc((100% - 36px) / 3);
-      width: calc((100% - 36px) / 3);
+      flex: 0 0 350px;
+      width: 350px;
       aspect-ratio: 304 / 310;
+      border-radius: 12px;
       overflow: hidden;
       cursor: pointer;
-      transition: transform 0.25s ease, box-shadow 0.25s ease;
-      scroll-snap-align: start;
+      position: relative;
+      margin: 0 14px;
+      transition: transform 0.45s cubic-bezier(0.25, 1, 0.5, 1), 
+                  opacity 0.45s ease, 
+                  filter 0.45s ease, 
+                  box-shadow 0.45s ease;
+      transform: scale(0.88);
+      opacity: 0.65;
+      filter: brightness(0.92);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+      background: #00913D;
     }
 
-    .product-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 22px rgba(0, 145, 61, 0.18);
+    .product-card.is-active {
+      transform: scale(1.08);
+      opacity: 1;
+      filter: brightness(1);
+      z-index: 10;
+      box-shadow: 0 16px 36px rgba(0, 145, 61, 0.32);
     }
 
     .product-card img.card-bg {
@@ -373,6 +358,72 @@
       height: 100%;
       object-fit: cover;
       display: block;
+      pointer-events: none;
+    }
+
+    .carousel-arrow {
+      background: #ffffff;
+      border: 1px solid rgba(0, 145, 61, 0.25);
+      color: var(--febra-green);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 20;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+      transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .carousel-arrow.arrow-prev {
+      left: -22px;
+    }
+
+    .carousel-arrow.arrow-next {
+      right: -22px;
+    }
+
+    .carousel-arrow:hover {
+      background: var(--febra-green);
+      transform: translateY(-50%) scale(1.1);
+      box-shadow: 0 6px 18px rgba(0, 145, 61, 0.35);
+    }
+
+    .carousel-arrow:hover svg {
+      fill: #ffffff;
+    }
+
+    .carousel-arrow svg {
+      width: 26px;
+      height: 26px;
+      fill: var(--febra-green);
+      transition: fill 0.2s ease;
+    }
+
+    .carousel-dots {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .carousel-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 40px;
+      background: #d4d4d4;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .carousel-dot.active {
+      width: 24px;
+      background: var(--febra-green);
     }
 
     /* =========================================================
@@ -986,16 +1037,35 @@
         grid-template-columns: 1fr;
         gap: 18px;
       }
-      .cards-grid {
-        max-width: 360px;
-        margin: 0 auto;
+      .carousel-track-container {
+        padding: 24px 0 20px 0;
       }
       .product-card {
-        flex: 0 0 100%;
-        max-width: 360px;
+        flex: 0 0 70vw;
+        width: 70vw;
+        max-width: 270px;
+        margin: 0 8px;
+        transform: scale(0.85);
+        opacity: 0.6;
+      }
+      .product-card.is-active {
+        transform: scale(1.06);
+        opacity: 1;
+        box-shadow: 0 12px 28px rgba(0, 145, 61, 0.28);
       }
       .carousel-arrow {
-        display: none;
+        display: flex !important;
+        width: 40px;
+        height: 40px;
+        background: rgba(255, 255, 255, 0.94);
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+        border: 1px solid rgba(0, 145, 61, 0.35);
+      }
+      .carousel-arrow.arrow-prev {
+        left: 6px;
+      }
+      .carousel-arrow.arrow-next {
+        right: 6px;
       }
       .timeline-nav {
         overflow-x: auto;
@@ -1142,31 +1212,32 @@
           </svg>
         </button>
 
-        <!-- Grilla de Tarjetas -->
-        <div class="cards-grid" id="cardsGrid">
-          <!-- Tarjeta 1: Rastra Acondicionadora -->
-          <div class="product-card" onclick="openProductModal('Rastra Acondicionadora')">
-            <img src="assets/card_rastra_full.png?v=4" alt="RASTRA ACONDICIONADORA - Nivelación y terminación con precisión" class="card-bg" />
-          </div>
+        <div class="carousel-track-container" id="carouselTrackContainer">
+          <div class="carousel-track" id="cardsGrid">
+            <!-- Tarjeta 1: Rastra Acondicionadora -->
+            <div class="product-card" onclick="openProductModal('Rastra Acondicionadora')">
+              <img src="assets/card_rastra_full.png?v=4" alt="RASTRA ACONDICIONADORA - Nivelación y terminación con precisión" class="card-bg" />
+            </div>
 
-          <!-- Tarjeta 2: Subsolador Descompactador -->
-          <div class="product-card" onclick="openProductModal('Subsolador Descompactador')">
-            <img src="assets/card_subsolador_full.png?v=4" alt="SUBSOLADOR DESCOMPACTADOR - Profundidad que transforma el suelo" class="card-bg" />
-          </div>
+            <!-- Tarjeta 2: Subsolador Descompactador -->
+            <div class="product-card" onclick="openProductModal('Subsolador Descompactador')">
+              <img src="assets/card_subsolador_full.png?v=4" alt="SUBSOLADOR DESCOMPACTADOR - Profundidad que transforma el suelo" class="card-bg" />
+            </div>
 
-          <!-- Tarjeta 3: Carpidor -->
-          <div class="product-card" onclick="openProductModal('Carpidor')">
-            <img src="assets/card_carpidor_full.png?v=4" alt="CARPIDOR - Precisión que protege el suelo" class="card-bg" />
-          </div>
+            <!-- Tarjeta 3: Carpidor -->
+            <div class="product-card" onclick="openProductModal('Carpidor')">
+              <img src="assets/card_carpidor_full.png?v=4" alt="CARPIDOR - Precisión que protege el suelo" class="card-bg" />
+            </div>
 
-          <!-- Tarjeta 4: Rolo Hidráulico -->
-          <div class="product-card" onclick="openProductModal('Rolo Hidráulico')">
-            <img src="assets/card_rolo_full.png?v=4" alt="ROLO HIDRÁULICO" class="card-bg" />
-          </div>
+            <!-- Tarjeta 4: Rolo Hidráulico -->
+            <div class="product-card" onclick="openProductModal('Rolo Hidráulico')">
+              <img src="assets/card_rolo_full.png?v=4" alt="ROLO HIDRÁULICO" class="card-bg" />
+            </div>
 
-          <!-- Tarjeta 5: Guinche Hidráulico -->
-          <div class="product-card" onclick="openProductModal('Guinche Hidráulico')">
-            <img src="assets/card_guinche_full.png?v=4" alt="GUINCHE HIDRÁULICO - Fuerza que eleva tu operación" class="card-bg" />
+            <!-- Tarjeta 5: Guinche Hidráulico -->
+            <div class="product-card" onclick="openProductModal('Guinche Hidráulico')">
+              <img src="assets/card_guinche_full.png?v=4" alt="GUINCHE HIDRÁULICO - Fuerza que eleva tu operación" class="card-bg" />
+            </div>
           </div>
         </div>
 
@@ -1177,6 +1248,8 @@
           </svg>
         </button>
       </div>
+
+      <div class="carousel-dots" id="carouselDots"></div>
     </div>
   </section>
 
@@ -1490,38 +1563,189 @@
       document.getElementById('contacto').scrollIntoView({ behavior: 'smooth' });
     }
 
-    // Navegación de carrusel de tarjetas
-    const cardsGrid = document.getElementById('cardsGrid');
-    const prevCardBtn = document.getElementById('prevCardBtn');
-    const nextCardBtn = document.getElementById('nextCardBtn');
+    // =========================================================
+    // CARRUSEL 3D COVER FLOW: AUTOPLAY, 1 EN 1, INFINITO Y SWIPE
+    // =========================================================
+    (function initCoverFlowCarousel() {
+      const container = document.getElementById('carouselTrackContainer');
+      const track = document.getElementById('cardsGrid');
+      const prevBtn = document.getElementById('prevCardBtn');
+      const nextBtn = document.getElementById('nextCardBtn');
+      const dotsContainer = document.getElementById('carouselDots');
+      if (!container || !track || !prevBtn || !nextBtn) return;
 
-    function getCardScrollStep() {
-      const card = cardsGrid ? cardsGrid.querySelector('.product-card') : null;
-      return card ? card.offsetWidth + 18 : 320;
-    }
+      const originalCards = Array.from(track.children);
+      const total = originalCards.length;
+      if (total === 0) return;
 
-    if (nextCardBtn && cardsGrid) {
-      nextCardBtn.addEventListener('click', () => {
-        const step = getCardScrollStep();
-        const maxScroll = cardsGrid.scrollWidth - cardsGrid.clientWidth;
-        if (cardsGrid.scrollLeft >= maxScroll - 15) {
-          cardsGrid.scrollTo({ left: 0, behavior: 'smooth' });
-        } else {
-          cardsGrid.scrollBy({ left: step, behavior: 'smooth' });
+      // Crear dots indicadores
+      if (dotsContainer) {
+        dotsContainer.innerHTML = '';
+        for (let i = 0; i < total; i++) {
+          const dot = document.createElement('div');
+          dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+          dot.addEventListener('click', () => {
+            goToRealIndex(i);
+            resetAutoplay();
+          });
+          dotsContainer.appendChild(dot);
         }
-      });
-    }
+      }
+      const dots = dotsContainer ? Array.from(dotsContainer.children) : [];
 
-    if (prevCardBtn && cardsGrid) {
-      prevCardBtn.addEventListener('click', () => {
-        const step = getCardScrollStep();
-        if (cardsGrid.scrollLeft <= 15) {
-          cardsGrid.scrollTo({ left: cardsGrid.scrollWidth, behavior: 'smooth' });
+      // Clones para loop infinito fluido: [clonesBefore] [originales] [clonesAfter]
+      const clonesBefore = originalCards.map(c => c.cloneNode(true));
+      const clonesAfter = originalCards.map(c => c.cloneNode(true));
+
+      clonesBefore.reverse().forEach(c => track.insertBefore(c, track.firstChild));
+      clonesAfter.forEach(c => track.appendChild(c));
+
+      const allCards = Array.from(track.children);
+      let currentIndex = total; // Inicia en la 1ra tarjeta original
+
+      function updateActiveClasses() {
+        allCards.forEach((c, idx) => {
+          if (idx === currentIndex) {
+            c.classList.add('is-active');
+          } else {
+            c.classList.remove('is-active');
+          }
+        });
+
+        const realIdx = ((currentIndex - total) % total + total) % total;
+        dots.forEach((d, i) => {
+          d.classList.toggle('active', i === realIdx);
+        });
+      }
+
+      function updatePosition(smooth = true) {
+        if (!smooth) {
+          track.style.transition = 'none';
         } else {
-          cardsGrid.scrollBy({ left: -step, behavior: 'smooth' });
+          track.style.transition = 'transform 0.45s cubic-bezier(0.25, 1, 0.5, 1)';
         }
+
+        const card = allCards[currentIndex];
+        if (!card) return;
+
+        // Centrado exacto: centro del contenedor menos el centro de la tarjeta activa en el track
+        const cardCenter = card.offsetLeft + (card.offsetWidth / 2);
+        const containerCenter = container.offsetWidth / 2;
+        const targetX = containerCenter - cardCenter;
+
+        track.style.transform = `translateX(${targetX}px)`;
+        updateActiveClasses();
+      }
+
+      function handleTransitionEnd() {
+        if (currentIndex < total) {
+          currentIndex += total;
+          updatePosition(false);
+        } else if (currentIndex >= total * 2) {
+          currentIndex -= total;
+          updatePosition(false);
+        }
+      }
+      track.addEventListener('transitionend', handleTransitionEnd);
+
+      function nextSlide() {
+        currentIndex++;
+        updatePosition(true);
+      }
+
+      function prevSlide() {
+        currentIndex--;
+        updatePosition(true);
+      }
+
+      function goToRealIndex(idx) {
+        currentIndex = total + idx;
+        updatePosition(true);
+      }
+
+      nextBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        nextSlide();
+        resetAutoplay();
       });
-    }
+
+      prevBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        prevSlide();
+        resetAutoplay();
+      });
+
+      // Clic en tarjetas: si es lateral se centra ("tocar los costaditos"), si es central abre el formulario
+      allCards.forEach((card, idx) => {
+        card.addEventListener('click', (e) => {
+          if (idx !== currentIndex) {
+            e.preventDefault();
+            e.stopPropagation();
+            currentIndex = idx;
+            updatePosition(true);
+            resetAutoplay();
+          }
+        });
+      });
+
+      // Autoplay continuo de a 1 tarjeta
+      let autoplayTimer = null;
+      function startAutoplay() {
+        stopAutoplay();
+        autoplayTimer = setInterval(nextSlide, 3500);
+      }
+      function stopAutoplay() {
+        if (autoplayTimer) {
+          clearInterval(autoplayTimer);
+          autoplayTimer = null;
+        }
+      }
+      function resetAutoplay() {
+        stopAutoplay();
+        startAutoplay();
+      }
+
+      container.addEventListener('mouseenter', stopAutoplay);
+      container.addEventListener('mouseleave', startAutoplay);
+
+      // Deslizar con el dedo en móviles (Touch / Swipe)
+      let touchStartX = 0;
+      let touchDeltaX = 0;
+      let isTouching = false;
+
+      container.addEventListener('touchstart', (e) => {
+        stopAutoplay();
+        isTouching = true;
+        touchStartX = e.touches[0].clientX;
+        touchDeltaX = 0;
+      }, { passive: true });
+
+      container.addEventListener('touchmove', (e) => {
+        if (!isTouching) return;
+        touchDeltaX = e.touches[0].clientX - touchStartX;
+      }, { passive: true });
+
+      container.addEventListener('touchend', () => {
+        if (!isTouching) return;
+        isTouching = false;
+        if (touchDeltaX < -35) {
+          nextSlide();
+        } else if (touchDeltaX > 35) {
+          prevSlide();
+        }
+        startAutoplay();
+      });
+
+      window.addEventListener('resize', () => {
+        updatePosition(false);
+      });
+
+      // Render inicial
+      setTimeout(() => {
+        updatePosition(false);
+        startAutoplay();
+      }, 50);
+    })();
   </script>
 </body>
 </html>
