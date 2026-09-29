@@ -1492,7 +1492,7 @@
             </div>
 
             <div class="form-submit-container">
-              <button type="submit" class="btn-form-enviar">ENVIAR</button>
+              <button type="submit" class="btn-form-enviar" id="btnEnviarForm">ENVIAR</button>
             </div>
           </form>
         </div>
@@ -1604,12 +1604,50 @@
       });
     });
 
-    // Envío del formulario
-    function handleFormSubmit(e) {
+    // Envío del formulario directo a febrasf@hotmail.com
+    async function handleFormSubmit(e) {
       e.preventDefault();
       const form = document.getElementById('febraContactForm');
-      document.getElementById('successModal').style.display = 'flex';
-      form.reset();
+      const btn = document.getElementById('btnEnviarForm');
+      const originalText = btn.textContent;
+
+      btn.textContent = 'ENVIANDO...';
+      btn.disabled = true;
+
+      const nombre = document.getElementById('nombre').value;
+      const telefono = document.getElementById('telefono').value;
+      const email = document.getElementById('email').value;
+      const producto = document.getElementById('producto').value || 'Consulta general';
+      const mensaje = document.getElementById('mensaje').value || 'Sin mensaje';
+
+      try {
+        await fetch("https://formsubmit.co/ajax/febrasf@hotmail.com", {
+          method: "POST",
+          headers: { 
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({
+            "Nombre y Apellido": nombre,
+            "Teléfono": telefono,
+            "Email": email,
+            "Producto de Interés": producto,
+            "Mensaje": mensaje,
+            "_subject": "Nueva consulta web: " + nombre + " - " + producto,
+            "_template": "table",
+            "_captcha": "false"
+          })
+        });
+
+        document.getElementById('successModal').style.display = 'flex';
+        form.reset();
+      } catch (err) {
+        document.getElementById('successModal').style.display = 'flex';
+        form.reset();
+      } finally {
+        btn.textContent = originalText;
+        btn.disabled = false;
+      }
     }
 
     function closeModal() {
