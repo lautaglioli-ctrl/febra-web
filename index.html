@@ -1621,7 +1621,7 @@
       const mensaje = document.getElementById('mensaje').value || 'Sin mensaje';
 
       try {
-        await fetch("https://formsubmit.co/ajax/febrasf@hotmail.com", {
+        await fetch("https://formspree.io/f/mzezovnv", {
           method: "POST",
           headers: { 
             'Content-Type': 'application/json',
@@ -1632,10 +1632,7 @@
             "Teléfono": telefono,
             "Email": email,
             "Producto de Interés": producto,
-            "Mensaje": mensaje,
-            "_subject": "Nueva consulta web: " + nombre + " - " + producto,
-            "_template": "table",
-            "_captcha": "false"
+            "Mensaje": mensaje
           })
         });
 
