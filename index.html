@@ -407,6 +407,36 @@
       pointer-events: none;
     }
 
+    .card-action-badge {
+      position: absolute;
+      bottom: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.72);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      color: #ffffff;
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      white-space: nowrap;
+      pointer-events: none;
+      transition: all 0.3s ease;
+      opacity: 0.85;
+    }
+
+    .product-card.is-active .card-action-badge {
+      background: var(--febra-green);
+      border-color: #ffffff;
+      box-shadow: 0 4px 14px rgba(0, 145, 61, 0.45);
+      opacity: 1;
+      transform: translateX(-50%) scale(1.04);
+    }
+
     .carousel-arrow {
       background: #ffffff;
       border: 1px solid rgba(0, 145, 61, 0.25);
@@ -1015,6 +1045,334 @@
     }
 
     /* =========================================================
+       MODAL DE FICHA TÉCNICA (OPCIÓN 1)
+       ========================================================= */
+    .tech-modal-overlay {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(10, 20, 15, 0.82);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 2500;
+      padding: 16px;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+
+    .tech-modal-overlay.is-open {
+      display: flex;
+      opacity: 1;
+    }
+
+    .tech-modal-box {
+      background: #ffffff;
+      width: 100%;
+      max-width: 960px;
+      max-height: 90vh;
+      border-radius: 14px;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transform: scale(0.95);
+      transition: transform 0.25s cubic-bezier(0.2, 0.9, 0.3, 1);
+    }
+
+    .tech-modal-overlay.is-open .tech-modal-box {
+      transform: scale(1);
+    }
+
+    .tech-modal-header {
+      background: #f8faf8;
+      border-bottom: 1px solid #e7ede8;
+      padding: 18px 24px 14px 24px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    .tech-modal-badge {
+      display: inline-block;
+      background: rgba(0, 145, 61, 0.12);
+      color: var(--febra-green);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      padding: 3px 10px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .tech-modal-title {
+      font-size: 24px;
+      font-weight: 900;
+      color: var(--febra-green);
+      letter-spacing: -0.5px;
+      margin: 0;
+      line-height: 1.15;
+      text-transform: uppercase;
+    }
+
+    .tech-modal-subtitle {
+      font-size: 13.5px;
+      color: #666666;
+      margin: 4px 0 0 0;
+      font-weight: 500;
+    }
+
+    .tech-modal-close {
+      background: #ffffff;
+      border: 1px solid #d4ded6;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #555555;
+      font-size: 24px;
+      line-height: 1;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+      margin-left: 16px;
+    }
+
+    .tech-modal-close:hover {
+      background: var(--febra-green);
+      color: #ffffff;
+      border-color: var(--febra-green);
+      transform: scale(1.08);
+    }
+
+    .tech-modal-scrollable {
+      padding: 22px 24px;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .tech-modal-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.15fr;
+      gap: 24px;
+      align-items: start;
+      margin-bottom: 24px;
+    }
+
+    .tech-modal-photo-wrap {
+      background: #f4f6f4;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid #e2eae3;
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.03);
+    }
+
+    .tech-modal-photo-wrap img {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: cover;
+    }
+
+    .tech-table-container {
+      overflow-x: auto;
+      border-radius: 8px;
+      border: 1px solid #dbe6dd;
+      background: #ffffff;
+    }
+
+    .tech-spec-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      text-align: left;
+    }
+
+    .tech-spec-table th {
+      background: var(--febra-green);
+      color: #ffffff;
+      padding: 10px 12px;
+      font-weight: 800;
+      font-size: 12px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      border: 1px solid #007a33;
+      white-space: nowrap;
+    }
+
+    .tech-spec-table td {
+      padding: 9px 12px;
+      border: 1px solid #e5ede7;
+      color: #333333;
+      font-size: 13px;
+    }
+
+    .tech-spec-table tbody tr:nth-child(even) {
+      background: #fbfdfb;
+    }
+
+    .tech-spec-table tbody tr:hover {
+      background: rgba(0, 145, 61, 0.05);
+    }
+
+    .tech-table-note {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--febra-green);
+      margin-top: 10px;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+    }
+
+    .table-scroll-hint {
+      font-size: 11px;
+      color: #777777;
+      margin-bottom: 6px;
+      font-style: italic;
+    }
+
+    .color-dot {
+      display: inline-block;
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      margin-right: 4px;
+      vertical-align: middle;
+      border: 1px solid rgba(0,0,0,0.2);
+    }
+    .color-dot.green { background: #00913D; }
+    .color-dot.red { background: #d32f2f; }
+    .color-dot.black { background: #222222; }
+
+    /* Sección YouTube dentro del Modal */
+    .tech-youtube-section {
+      background: #f7faf7;
+      border: 1px solid #e1ebe3;
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+
+    .tech-youtube-heading {
+      font-size: 15px;
+      font-weight: 800;
+      color: #222222;
+      margin-bottom: 12px;
+    }
+
+    .tech-youtube-link {
+      display: inline-block;
+      position: relative;
+      border-radius: 8px;
+      overflow: hidden;
+      max-width: 520px;
+      width: 100%;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .tech-youtube-link:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 22px rgba(0,0,0,0.2);
+    }
+
+    .tech-youtube-link img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .tech-modal-footer {
+      background: #ffffff;
+      border-top: 1px solid #e7ede8;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 12px;
+    }
+
+    .btn-tech-wa {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #25D366;
+      color: #ffffff;
+      font-size: 13.5px;
+      font-weight: 800;
+      padding: 10px 18px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      transition: background 0.2s ease, transform 0.2s ease;
+      text-decoration: none;
+    }
+
+    .btn-tech-wa svg {
+      width: 17px;
+      height: 17px;
+      fill: currentColor;
+    }
+
+    .btn-tech-wa:hover {
+      background: #1eb956;
+      transform: translateY(-1px);
+    }
+
+    .btn-tech-quote {
+      background: var(--febra-green);
+      color: #ffffff;
+      font-size: 13.5px;
+      font-weight: 800;
+      padding: 10px 20px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+
+    .btn-tech-quote:hover {
+      background: #007732;
+      transform: translateY(-1px);
+    }
+
+    @media (max-width: 768px) {
+      .tech-modal-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+      .tech-modal-header {
+        padding: 14px 16px;
+      }
+      .tech-modal-scrollable {
+        padding: 14px 16px;
+      }
+      .tech-modal-footer {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 12px 16px;
+      }
+      .btn-tech-wa, .btn-tech-quote {
+        justify-content: center;
+        text-align: center;
+      }
+      .tech-modal-title {
+        font-size: 19px;
+      }
+    }
+
+    /* =========================================================
        8. RESPONSIVE BREAKPOINTS
        ========================================================= */
     @media (max-width: 1120px) {
@@ -1285,26 +1643,31 @@
             <!-- Tarjeta 1: Rastra Acondicionadora -->
             <div class="product-card" onclick="openProductModal('Rastra Acondicionadora')">
               <img src="assets/card_rastra_full.jpg?v=5" alt="RASTRA ACONDICIONADORA - Nivelación y terminación con precisión" class="card-bg" />
+              <span class="card-action-badge">Ficha Técnica +</span>
             </div>
 
             <!-- Tarjeta 2: Subsolador Descompactador -->
             <div class="product-card" onclick="openProductModal('Subsolador Descompactador')">
               <img src="assets/card_subsolador_full.jpg?v=5" alt="SUBSOLADOR DESCOMPACTADOR - Profundidad que transforma el suelo" class="card-bg" />
+              <span class="card-action-badge">Ficha Técnica +</span>
             </div>
 
             <!-- Tarjeta 3: Carpidor -->
             <div class="product-card" onclick="openProductModal('Carpidor')">
               <img src="assets/card_carpidor_full.jpg?v=5" alt="CARPIDOR - Precisión que protege el suelo" class="card-bg" />
+              <span class="card-action-badge">Ficha Técnica +</span>
             </div>
 
             <!-- Tarjeta 4: Rolo Hidráulico -->
             <div class="product-card" onclick="openProductModal('Rolo Hidráulico')">
               <img src="assets/card_rolo_full.jpg?v=5" alt="ROLO HIDRÁULICO" class="card-bg" />
+              <span class="card-action-badge">Ficha Técnica +</span>
             </div>
 
             <!-- Tarjeta 5: Guinche Hidráulico -->
             <div class="product-card" onclick="openProductModal('Guinche Hidráulico')">
               <img src="assets/card_guinche_full.jpg?v=5" alt="GUINCHE HIDRÁULICO - Fuerza que eleva tu operación" class="card-bg" />
+              <span class="card-action-badge">Ficha Técnica +</span>
             </div>
           </div>
         </div>
@@ -1516,6 +1879,60 @@
     </div>
   </div>
 
+  <!-- Modal de Ficha Técnica de Producto (Opción 1) -->
+  <div class="tech-modal-overlay" id="productTechModal" onclick="closeTechModalOnOverlay(event)">
+    <div class="tech-modal-box" role="dialog" aria-modal="true" aria-labelledby="techModalTitle">
+      <!-- Header -->
+      <div class="tech-modal-header">
+        <div>
+          <span class="tech-modal-badge">Ficha Técnica Oficial</span>
+          <h2 class="tech-modal-title" id="techModalTitle">PRODUCTO</h2>
+          <p class="tech-modal-subtitle" id="techModalSubtitle">Descripción breve</p>
+        </div>
+        <button class="tech-modal-close" onclick="closeTechModal()" aria-label="Cerrar ficha técnica">&times;</button>
+      </div>
+
+      <!-- Contenido scrolleable -->
+      <div class="tech-modal-scrollable">
+        <div class="tech-modal-grid">
+          <!-- Columna Izquierda: Foto de la Maquinaria -->
+          <div class="tech-modal-photo-wrap">
+            <img id="techModalImg" src="" alt="Implemento Agrícola FEBRA" />
+          </div>
+
+          <!-- Columna Derecha: Tabla Técnica -->
+          <div>
+            <div class="tech-table-container" id="techModalTableContainer">
+              <!-- Se inyecta dinámicamente con JS -->
+            </div>
+            <div class="tech-table-note" id="techModalNote"></div>
+          </div>
+        </div>
+
+        <!-- Sección YouTube -->
+        <div class="tech-youtube-section">
+          <div class="tech-youtube-heading">Mirá cómo trabaja en nuestro perfil de YouTube</div>
+          <a id="techModalYoutubeLink" href="https://www.youtube.com/@febraimplementosagricolas" target="_blank" rel="noopener noreferrer" class="tech-youtube-link" title="Ver videos en YouTube">
+            <img id="techModalYoutubeImg" src="" alt="Demostración en YouTube" />
+          </a>
+        </div>
+      </div>
+
+      <!-- Footer con Botones de Acción -->
+      <div class="tech-modal-footer">
+        <a id="techModalWhatsappBtn" href="" target="_blank" rel="noopener noreferrer" class="btn-tech-wa">
+          <svg viewBox="0 0 16 16">
+            <path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.016-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232"/>
+          </svg>
+          CONSULTAR POR WHATSAPP
+        </a>
+        <button type="button" class="btn-tech-quote" onclick="quoteFromModal()">
+          SOLICITAR COTIZACIÓN
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- JavaScript Interactivo -->
   <script>
     // Datos históricos para la sección interactiva
@@ -1653,13 +2070,284 @@
       document.getElementById('successModal').style.display = 'none';
     }
 
-    // Modal de producto
-    function openProductModal(producto) {
-      const selectProducto = document.getElementById('producto');
-      if (selectProducto) {
-        selectProducto.value = producto;
+    // =========================================================
+    // BASE DE DATOS Y MODAL DE FICHAS TÉCNICAS (OPCIÓN 1)
+    // =========================================================
+    const productosTechData = {
+      "Rastra Acondicionadora": {
+        titulo: "RASTRA DE LABRANZA VERTICAL",
+        subtitulo: "Nivelación y terminación con máxima precisión.",
+        img: "assets/modal_rastra_machine.png",
+        youtubeImg: "assets/modal_rastra_youtube.png",
+        youtubeUrl: "https://www.youtube.com/@febraimplementosagricolas",
+        nota: "Desarrollo y fabricación propia · Industria Argentina",
+        tableHtml: `
+          <table class="tech-spec-table">
+            <thead>
+              <tr>
+                <th>ESPECIFICACIONES</th>
+                <th>OLI MAX 440</th>
+                <th>OLI MAX 6</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Ancho de trabajo</strong></td>
+                <td>4,40 m</td>
+                <td>6 m</td>
+              </tr>
+              <tr>
+                <td><strong>Potencia requerida</strong></td>
+                <td>120 HP</td>
+                <td>150–160 HP</td>
+              </tr>
+              <tr>
+                <td><strong>Profundidad de trabajo</strong></td>
+                <td>4 a 6 cm</td>
+                <td>4 a 6 cm</td>
+              </tr>
+              <tr>
+                <td><strong>Rodado</strong></td>
+                <td>14</td>
+                <td>14</td>
+              </tr>
+            </tbody>
+          </table>
+        `,
+        waText: "Hola FEBRA! Quisiera consultar por la Rastra de Labranza Vertical OLI MAX."
+      },
+      "Rolo Hidráulico": {
+        titulo: "ROLO HIDRÁULICO",
+        subtitulo: "Compactación uniforme, robustez y durabilidad para tu lote.",
+        img: "assets/modal_rolo_machine.png",
+        youtubeImg: "assets/modal_rolo_youtube.png",
+        youtubeUrl: "https://www.youtube.com/@febraimplementosagricolas",
+        nota: "CONSULTAR POR MEDIDAS ESPECIALES",
+        tableHtml: `
+          <div class="table-scroll-hint">Deslizá horizontalmente para ver todos los anchos &rarr;</div>
+          <table class="tech-spec-table">
+            <thead>
+              <tr>
+                <th>ESPECIFICACIONES</th>
+                <th>5000</th>
+                <th>6000</th>
+                <th>7000</th>
+                <th>8000</th>
+                <th>9000</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Ancho de trabajo</strong></td>
+                <td>5 m</td>
+                <td>6 m</td>
+                <td>7 m</td>
+                <td>8 m</td>
+                <td>9 m</td>
+              </tr>
+              <tr>
+                <td><strong>Cantidad de rolos</strong></td>
+                <td colspan="5">3</td>
+              </tr>
+              <tr>
+                <td><strong>Diseño de rolos</strong></td>
+                <td colspan="5">Con planchuela / Ángulo / Redondo</td>
+              </tr>
+              <tr>
+                <td><strong>Diámetro de rolos</strong></td>
+                <td colspan="5">70 cm</td>
+              </tr>
+              <tr>
+                <td><strong>Colores poliuretánicos</strong></td>
+                <td colspan="5">
+                  <span class="color-dot green" title="Verde"></span>
+                  <span class="color-dot red" title="Rojo"></span>
+                  <span class="color-dot black" title="Negro"></span>
+                  A elección
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Rodado a elección</strong></td>
+                <td colspan="5">16, 17 o 18</td>
+              </tr>
+              <tr>
+                <td><strong>Montaje</strong></td>
+                <td colspan="5">Bañadas en grasa</td>
+              </tr>
+            </tbody>
+          </table>
+        `,
+        waText: "Hola FEBRA! Quisiera consultar por el Rolo Hidráulico."
+      },
+      "Guinche Hidráulico": {
+        titulo: "GUINCHE HIDRÁULICO",
+        subtitulo: "Fuerza que eleva tu operación en cada jornada.",
+        img: "assets/modal_guinche_machine.png",
+        youtubeImg: "assets/modal_guinche_youtube.png",
+        youtubeUrl: "https://www.youtube.com/@febraimplementosagricolas",
+        nota: "FUERZA QUE ELEVA TU OPERACIÓN.",
+        tableHtml: `
+          <table class="tech-spec-table">
+            <thead>
+              <tr>
+                <th>ESPECIFICACIONES</th>
+                <th>F2500</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Altura máxima</strong></td>
+                <td>6,4 m</td>
+              </tr>
+              <tr>
+                <td><strong>Altura mínima</strong></td>
+                <td>1 m</td>
+              </tr>
+              <tr>
+                <td><strong>Rodado</strong></td>
+                <td>Simple o Dual</td>
+              </tr>
+              <tr>
+                <td><strong>Capacidad</strong></td>
+                <td>2500 kg c/ brazo cerrado<br>1000 kg c/ brazo extendido</td>
+              </tr>
+            </tbody>
+          </table>
+        `,
+        waText: "Hola FEBRA! Quisiera consultar por el Guinche Hidráulico F2500."
+      },
+      "Carpidor": {
+        titulo: "CARPIDOR",
+        subtitulo: "Precisión que protege el suelo y optimiza recursos.",
+        img: "assets/card_carpidor_full.jpg",
+        youtubeImg: "assets/modal_rastra_youtube.png",
+        youtubeUrl: "https://www.youtube.com/@febraimplementosagricolas",
+        nota: "Control mecánico de malezas · Próximamente ficha técnica completa",
+        tableHtml: `
+          <table class="tech-spec-table">
+            <thead>
+              <tr>
+                <th>ESPECIFICACIONES</th>
+                <th>CARPIDOR FEBRA</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Labor</strong></td>
+                <td>Control mecánico de malezas y aireación del suelo</td>
+              </tr>
+              <tr>
+                <td><strong>Chasis</strong></td>
+                <td>Estructura de alta resistencia tubular</td>
+              </tr>
+              <tr>
+                <td><strong>Regulación</strong></td>
+                <td>Profundidad y distanciamiento regulable</td>
+              </tr>
+              <tr>
+                <td><strong>Configuraciones</strong></td>
+                <td>Consultar medidas con nuestro equipo técnico</td>
+              </tr>
+            </tbody>
+          </table>
+        `,
+        waText: "Hola FEBRA! Quisiera consultar por el Carpidor."
+      },
+      "Subsolador Descompactador": {
+        titulo: "SUBSOLADOR DESCOMPACTADOR",
+        subtitulo: "Profundidad que transforma el suelo y rompe capas compactadas.",
+        img: "assets/card_subsolador_full.jpg",
+        youtubeImg: "assets/modal_rastra_youtube.png",
+        youtubeUrl: "https://www.youtube.com/@febraimplementosagricolas",
+        nota: "Descompactación profunda · Próximamente ficha técnica completa",
+        tableHtml: `
+          <table class="tech-spec-table">
+            <thead>
+              <tr>
+                <th>ESPECIFICACIONES</th>
+                <th>LÍNEA SUBSOLADORES</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Función</strong></td>
+                <td>Descompactación profunda y rotura de piso de arado</td>
+              </tr>
+              <tr>
+                <td><strong>Timones</strong></td>
+                <td>Curvos de alta resistencia con fusible de seguridad</td>
+              </tr>
+              <tr>
+                <td><strong>Profundidad</strong></td>
+                <td>Regulable según condiciones del lote</td>
+              </tr>
+              <tr>
+                <td><strong>Configuraciones</strong></td>
+                <td>Consultar medidas con nuestro equipo técnico</td>
+              </tr>
+            </tbody>
+          </table>
+        `,
+        waText: "Hola FEBRA! Quisiera consultar por el Subsolador Descompactador."
       }
-      document.getElementById('contacto').scrollIntoView({ behavior: 'smooth' });
+    };
+
+    let activeModalProduct = "";
+
+    function openProductModal(producto) {
+      activeModalProduct = producto;
+      const data = productosTechData[producto] || productosTechData["Rastra Acondicionadora"];
+      
+      document.getElementById('techModalTitle').textContent = data.titulo;
+      document.getElementById('techModalSubtitle').textContent = data.subtitulo;
+      document.getElementById('techModalImg').src = data.img;
+      document.getElementById('techModalImg').alt = data.titulo;
+      document.getElementById('techModalTableContainer').innerHTML = data.tableHtml;
+      document.getElementById('techModalNote').textContent = data.nota;
+      
+      const ytImg = document.getElementById('techModalYoutubeImg');
+      const ytLink = document.getElementById('techModalYoutubeLink');
+      if (ytImg && data.youtubeImg) ytImg.src = data.youtubeImg;
+      if (ytLink && data.youtubeUrl) ytLink.href = data.youtubeUrl;
+
+      const waBtn = document.getElementById('techModalWhatsappBtn');
+      if (waBtn) {
+        waBtn.href = "https://wa.me/5493564233529?text=" + encodeURIComponent(data.waText);
+      }
+
+      const modal = document.getElementById('productTechModal');
+      modal.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeTechModal() {
+      const modal = document.getElementById('productTechModal');
+      if (modal) modal.classList.remove('is-open');
+      document.body.style.overflow = '';
+    }
+
+    function closeTechModalOnOverlay(e) {
+      if (e.target && e.target.id === 'productTechModal') {
+        closeTechModal();
+      }
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeTechModal();
+        closeModal();
+      }
+    });
+
+    function quoteFromModal() {
+      closeTechModal();
+      const selectProducto = document.getElementById('producto');
+      if (selectProducto && activeModalProduct) {
+        selectProducto.value = activeModalProduct;
+      }
+      setTimeout(() => {
+        document.getElementById('contacto').scrollIntoView({ behavior: 'smooth' });
+      }, 200);
     }
 
     // =========================================================
