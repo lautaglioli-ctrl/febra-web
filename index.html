@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+  <!-- Google tag (gtag.js) - Google Analytics FEBRA -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-LHXEQ9L5MD"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-LHXEQ9L5MD');
+  </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>FEBRA | Implementos Agrícolas - Tecnología en Maquinarias para tu Campo</title>
@@ -2216,6 +2225,7 @@
         });
 
         if (!respuesta.ok) throw new Error('Formspree ' + respuesta.status);
+        febraEvento('generate_lead', { producto: producto });
         document.getElementById('successModal').style.display = 'flex';
         form.reset();
       } catch (err) {
@@ -2676,8 +2686,32 @@
 
     let activeModalProduct = "";
 
+    // =========================================================
+    // MEDICIÓN DE CONSULTAS EN GOOGLE ANALYTICS
+    // =========================================================
+    function febraEvento(nombre, params) {
+      try { if (typeof gtag === 'function') gtag('event', nombre, params || {}); } catch (e) {}
+    }
+
+    document.addEventListener('click', function (e) {
+      const link = e.target.closest('a');
+      if (!link) return;
+      const href = link.getAttribute('href') || '';
+      if (href.indexOf('wa.me/') !== -1) {
+        const ubicacion = link.closest('#productTechModal') ? 'ficha_' + activeModalProduct
+          : link.closest('header') ? 'menu'
+          : link.closest('.hero-section') ? 'inicio'
+          : link.closest('#oli7000') ? 'banner_oli7000'
+          : link.closest('#contacto') ? 'contacto' : 'otro';
+        febraEvento('click_whatsapp', { ubicacion: ubicacion, numero: href.split('wa.me/')[1].split('?')[0] });
+      } else if (link.id === 'techModalPdfBtn') {
+        febraEvento('descarga_ficha', { producto: activeModalProduct });
+      }
+    });
+
     function openProductModal(producto) {
       activeModalProduct = producto;
+      febraEvento('ver_ficha', { producto: producto });
       const data = productosTechData[producto] || productosTechData["Rastra Acondicionadora"];
       
       document.getElementById('techModalTitle').textContent = data.titulo;
