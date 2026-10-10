@@ -1,0 +1,8 @@
+CLAUDE.md
+*.md
+.claude
+scratch*
+temp_*
+img_extracted
+Public
+*.mov
